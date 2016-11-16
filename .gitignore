@@ -40,6 +40,7 @@ Thumbs.db
 *.docx
 *.swp
 hw2/spam_data/
+hw3/data/
 __pycache__/
 ptb_word_lm.py
 reader.py
