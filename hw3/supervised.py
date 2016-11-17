@@ -10,13 +10,13 @@ from loading it in Python 3. You might have to load it in Python 2,
 save it in a different format, load it in Python 3 and repickle it.
 '''
 
-#from __future__ import print_function
+# from __future__ import print_function
 import pickle
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Convolution2D, MaxPooling2D
-from keras.optimizers import SGD, Adam
+from keras.optimizers import SGD, Adam, Adadelta
 from keras.utils import np_utils
 import numpy as np
 
@@ -31,7 +31,7 @@ img_rows, img_cols = 32, 32
 img_channels = 3
 
 # path to the model file with weights.
-model_path = 'supervised_model.h5'
+model_path = 'model_supervised_50ep.h5'
 
 # the data, shuffled and split between train and test sets
 label = pickle.load(open('./data/all_label.p','rb'))
@@ -62,54 +62,51 @@ model.add(Activation('relu'))
 model.add(Convolution2D(32, 3, 3))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
-# model.add(Dropout(0.25))
-
+model.add(Dropout(0.25))
 model.add(Convolution2D(64, 3, 3, border_mode='same'))
 model.add(Activation('relu'))
 model.add(Convolution2D(64, 3, 3))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 # model.add(Dropout(0.25))
-
 model.add(Convolution2D(128, 3, 3, border_mode='same'))
 model.add(Activation('relu'))
 model.add(Convolution2D(128, 3, 3))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 # model.add(Dropout(0.25))
-
 model.add(Flatten())
 model.add(Dense(512))
 model.add(Activation('relu'))
 # model.add(Dropout(0.5))
-model.add(Dense(256))
+model.add(Dense(512))
 model.add(Activation('relu'))
 # model.add(Dropout(0.5))
-model.add(Dense(128))
-model.add(Activation('relu'))
-# model.add(Dropout(0.5))
-model.add(Dense(64))
+model.add(Dense(512))
 model.add(Activation('relu'))
 # model.add(Dropout(0.5))
 model.add(Dense(32))
 model.add(Activation('relu'))
 # model.add(Dropout(0.5))
+model.add(Dense(32))
+model.add(Activation('relu'))
+model.add(Dropout(0.5))
 model.add(Dense(nb_classes))
 model.add(Activation('softmax'))
 
 # let's train the model using SGD + momentum (how original).
 # sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='categorical_crossentropy',
-              optimizer=Adam(),
+              optimizer=Adadelta(),
               metrics=['accuracy'])
 
 X_train = X_train.astype('float32')
 # X_test = X_test.astype('float32')
 X_train /= 255
 # X_test /= 255
-model.fit(X_train,Y_train,batch_size= 100, nb_epoch = 20,validation_split=0.01)
+# model.fit(X_train,Y_train,batch_size= 100, nb_epoch = 50,validation_split=0.02)
 
-'''
+
 if not data_augmentation:
     print('Not using data augmentation.')
     model.fit(X_train, Y_train,
@@ -143,6 +140,5 @@ else:
                         samples_per_epoch=X_train.shape[0],
                         nb_epoch=nb_epoch,
                         validation_data=(X_test, Y_test))
-'''
 # save model
-model.save(model_path)
+#model.save(model_path)

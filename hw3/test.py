@@ -1,3 +1,4 @@
+from __future__ import print_function
 from keras.preprocessing.image import ImageDataGenerator
 import pickle
 from keras.models import Sequential, load_model, model_from_json
@@ -8,7 +9,7 @@ from keras.utils import np_utils
 import json 
 import csv
 import numpy as np
-model_path = 'semisupervised.h5'
+model_path = 'model_supervised_50ep.h5'
 model = load_model(model_path)
 test = pickle.load(open('./data/test.p','rb'))
 test = np.reshape(test['data'],(10000,3,32,32))
@@ -18,7 +19,7 @@ test /= 255
 # X_test /= 255
 prediction =  model.predict_classes(test, batch_size=32, verbose=1)
 
-with open( 'prediction_semi.csv', 'w') as csvfile:
+with open( 'prediction_super_50ep.csv', 'w') as csvfile:
     fieldnames = ['ID','class']
     w = csv.DictWriter(csvfile,fieldnames=fieldnames)
     w.writeheader()
