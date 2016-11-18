@@ -18,6 +18,7 @@ from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Convolution2D, MaxPooling2D
 from keras.optimizers import SGD, Adam
 from keras.utils import np_utils
+import sys
 import numpy as np
 
 batch_size = 100 
@@ -33,7 +34,7 @@ img_channels = 3
 
 
 # the data, shuffled and split between train and test sets
-label = pickle.load(open('./data/all_label.p','rb'))
+label = pickle.load(open(sys.argv[1] + 'all_label.p','rb'))
 label = np.array(label)
 X_train = label.reshape(5000,3,32,32)
 Y_train = []
@@ -174,5 +175,5 @@ else:
 
 # save model
 # path to the model file with weights.
-#model_path = 'supervised_model.h5'
-#model.save(model_path)
+model_path = 'm01.h5'
+model.save(model_path)

@@ -18,6 +18,7 @@ from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Convolution2D, MaxPooling2D
 from keras.optimizers import SGD, Adam
 from keras.utils import np_utils
+import sys
 import numpy as np
 def data_split(X_train,Y_train, nVali):
     Xlen = len(X_train)
@@ -58,7 +59,7 @@ img_rows, img_cols = 32, 32
 img_channels = 3
 
 # the data, shuffled and split between train and test sets
-label = pickle.load(open('./data/all_label.p','rb'))
+label = pickle.load(open(sys.argv[1] + 'all_label.p','rb'))
 label = np.array(label)
 X_train = label.reshape(5000,3,32,32)
 Y_train = []
@@ -76,7 +77,7 @@ model = load_model(model_path)
 X_TRAIN = X_train
 Y_TRAIN = Y_train
 print('Start to load unlabeled data...')
-unlabel = pickle.load(open('./data/all_unlabel.p','rb'))
+unlabel = pickle.load(open(sys.argv[1] + 'all_unlabel.p','rb'))
 unlabel = np.reshape(unlabel,(45000,3,32,32))
 unlabel = unlabel.astype('float32')
 unlabel /= 255
@@ -145,5 +146,5 @@ for i in range(3):
                                   validation_data=(Valix, Valiy))
     History.append(history)
 # save model
-#model_path = 'semisupervised.h5'
-#model.save(model_path)
+model_path = sys.argv[2]
+model.save(model_path)
