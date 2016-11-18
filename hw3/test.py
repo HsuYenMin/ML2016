@@ -6,20 +6,25 @@ from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Convolution2D, MaxPooling2D
 from keras.optimizers import SGD, Adam
 from keras.utils import np_utils
+import sys
 import json 
 import csv
 import numpy as np
-model_path = 'model_supervised_50ep.h5'
+model_path = 'Encoder.h5'
+encoder = load_model(model_path)
+model_path = sys.argv[2]
 model = load_model(model_path)
-test = pickle.load(open('./data/test.p','rb'))
+
+test = pickle.load(open(sys.argv[1] + 'test.p','rb'))
 test = np.reshape(test['data'],(10000,3,32,32))
 test = test.astype('float32')
 # X_test = X_test.astype('float32')
 test /= 255
 # X_test /= 255
-prediction =  model.predict_classes(test, batch_size=32, verbose=1)
-
-with open( 'prediction_super_50ep.csv', 'w') as csvfile:
+encoded_img = encoder.predict(test, batch_size=1000, verbose=1)
+encoded_img = encoded_img.reshape(10000,128)
+prediction = model.predict_classes(encoded_img,batch_size=1000, verbose=1)
+with open( sys.argv[3], 'w') as csvfile:
     fieldnames = ['ID','class']
     w = csv.DictWriter(csvfile,fieldnames=fieldnames)
     w.writeheader()

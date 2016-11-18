@@ -44,4 +44,5 @@ hw3/data/
 __pycache__/
 ptb_word_lm.py
 reader.py
+gan.py
 spam_data/
