@@ -41,7 +41,9 @@ Thumbs.db
 *.swp
 hw2/spam_data/
 hw3/data/
+hw4/data/
 __pycache__/
 ptb_word_lm.py
 reader.py
 spam_data/
+hw4.py
