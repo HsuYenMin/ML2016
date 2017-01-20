@@ -29,7 +29,7 @@ def dataProcessingHW2(fname = 'spam_data/spam_train.csv'):
         Y.append(float(table[i][-1]))
     Ave = []
     SD = []
-    attri = getAttributesHW2()
+    attri = getAttributesHW2(fname)
     for index in ms:
         Ave.append(average(attri[index]))
         SD.append(std(attri[index]))
@@ -57,9 +57,9 @@ def testDataProcessHW2(Ave, SD, fname='spam_data/spam_test.csv'):
         Xtest[i] = (Xtest[i] - Ave) / SD
     return Xtest
 
-def getAttributesHW2():
+def getAttributesHW2(fname='spam_data/spam_train.csv'):
     # data processing
-    with codecs.open('spam_data/spam_train.csv',"r", encoding='big5', errors='ignore') as f:
+    with codecs.open(fname,"r", encoding='big5', errors='ignore') as f:
        table = [line.strip().split(',') for line in f]
     for i in range(len(table)):
         table[i] = table[i][1:]
